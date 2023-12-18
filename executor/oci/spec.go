@@ -223,7 +223,7 @@ func (s *submounts) subMount(m mount.Mount, subPath string) (mount.Mount, error)
 	}
 	h, err := hashstructure.Hash(m, hashstructure.FormatV2, nil)
 	if err != nil {
-		return mount.Mount{}, nil
+		return mount.Mount{}, err
 	}
 	if mr, ok := s.m[h]; ok {
 		if sm, ok := mr.subRefs[subPath]; ok {
@@ -231,7 +231,7 @@ func (s *submounts) subMount(m mount.Mount, subPath string) (mount.Mount, error)
 		}
 		sm, unmount, err := sub(mr.mount, subPath)
 		if err != nil {
-			return mount.Mount{}, nil
+			return mount.Mount{}, err
 		}
 		mr.subRefs[subPath] = mountRef{
 			mount:   sm,
